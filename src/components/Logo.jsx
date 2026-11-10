@@ -1,0 +1,15 @@
+export default function Logo({ size = 38 }) {
+  return (
+    <svg className="logo" width={size} height={size} viewBox="0 0 64 64" aria-hidden="true">
+      <rect width="64" height="64" rx="18" fill="var(--primary)" />
+      <path
+        d="M32 54c9 0 15-6 15-14 0-6.5-3.8-11-7.5-15-.8 4.2-3.2 6.5-5.4 7.6C34.6 25.4 31 18 25 11c0 9-9 14-9 25 0 10.5 7 18 16 18z"
+        fill="#FFD27A"
+      />
+      <path
+        d="M32 54c4.4 0 7.5-3 7.5-7.2 0-3.4-2-6-4-8.3-.6 2.2-1.8 3.4-3 4-.4-3.4-2.3-6.7-5-9.5 0 5-4 7.6-4 13.4 0 4.4 3.6 7.6 8.5 7.6z"
+        fill="#fff"
+      />
+    </svg>
+  );
+}
