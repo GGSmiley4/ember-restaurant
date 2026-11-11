@@ -19,9 +19,24 @@ The menu has 6 items: two burgers, two drinks and two desserts.
 - Track the order with a status bar: Received → Preparing → On the way → Delivered
 - Switch between light mode and dark mode
 
-The website works on both computers and phones. There's no backend, so the cart and orders are saved in the browser.
+The website works on both computers and phones. There's no backend, so the cart and orders are saved in the browser (localStorage).
 
 **Built with:** React (Create React App), React Router and CSS.
+
+**Pages:** Home, Menu, Cart, Checkout, Track Order, About and Contact.
+
+**Folders:**
+
+```
+src/
+  components/   NavBar, Footer, DishCard, OrderSummary (reused on several pages)
+  pages/        one file for each page
+  data/         menu.js - the list of dishes
+  styles/       App.css - all the styling, including dark mode and mobile layout
+  App.js        the routes, the cart and the dark mode
+```
+
+**Photos:** the food and restaurant photos come from [Unsplash](https://unsplash.com) (free to use).
 
 ## Setup Instructions
 

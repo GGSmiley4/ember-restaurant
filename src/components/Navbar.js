@@ -1,58 +1,55 @@
-import { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import Logo from './Logo';
-import { CartIcon, CloseIcon, MenuIcon, MoonIcon, SunIcon } from './Icons';
-
-const LINKS = [
-  { to: '/', label: 'Home' },
-  { to: '/menu', label: 'Menu' },
-  { to: '/about', label: 'About' },
-  { to: '/contact', label: 'Contact' },
-  { to: '/track', label: 'Track Order' },
-];
+import React, { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 
 
-function Navbar({ count, theme, toggleTheme }) {
-  const [open, setOpen] = useState(false); 
+function NavBar(props) {
+
+  const [menuOpen, setMenuOpen] = useState(false);
 
   function closeMenu() {
-    setOpen(false);
+    setMenuOpen(false);
   }
 
   return (
-    <header className="navbar">
-      <div className="container nav-inner">
-        <Link to="/" className="brand" onClick={closeMenu}>
-          <Logo />
-          <span className="brand-name">Ember</span>
+    <nav className="navbar">
+      <Link to="/" className="logo" onClick={closeMenu}>
+        🔥 Ember
+      </Link>
+
+      <div className={menuOpen ? "nav-links open" : "nav-links"}>
+        <NavLink to="/" onClick={closeMenu}>Home</NavLink>
+        <NavLink to="/menu" onClick={closeMenu}>Menu</NavLink>
+        <NavLink to="/track" onClick={closeMenu}>Track Order</NavLink>
+        <NavLink to="/about" onClick={closeMenu}>About</NavLink>
+        <NavLink to="/contact" onClick={closeMenu}>Contact</NavLink>
+      </div>
+
+      <div className="nav-buttons">
+        <button
+          className="icon-btn"
+          onClick={props.toggleDarkMode}
+          title="Dark mode"
+        >
+          {props.darkMode ? "☀️" : "🌙"}
+        </button>
+
+        <Link to="/cart" className="cart-btn" onClick={closeMenu}>
+          🛒 Cart
+          {props.cartCount > 0 && (
+            <span className="cart-count">{props.cartCount}</span>
+          )}
         </Link>
 
-        <nav className={`nav-links ${open ? 'is-open' : ''}`}>
-          {LINKS.map((link) => (
-            <NavLink key={link.to} to={link.to} end className="nav-link" onClick={closeMenu}>
-              {link.label}
-            </NavLink>
-          ))}
-        </nav>
-
-        <div className="nav-actions">
-          <button type="button" className="icon-btn theme-toggle" onClick={toggleTheme} title="Light / dark mode">
-            {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
-          </button>
-
-          <Link to="/cart" className="icon-btn cart-btn" title="Cart" onClick={closeMenu}>
-            <CartIcon />
-            {count > 0 && <span className="cart-badge">{count}</span>}
-          </Link>
-
-          {}
-          <button type="button" className="icon-btn nav-toggle" onClick={() => setOpen(!open)} title="Menu">
-            {open ? <CloseIcon /> : <MenuIcon />}
-          </button>
-        </div>
+        <button
+          className="icon-btn menu-toggle"
+          onClick={() => setMenuOpen(!menuOpen)}
+          title="Menu"
+        >
+          {menuOpen ? "✕" : "☰"}
+        </button>
       </div>
-    </header>
+    </nav>
   );
 }
 
-export default Navbar;
+export default NavBar;

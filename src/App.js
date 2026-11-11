@@ -1,147 +1,125 @@
-import { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import ScrollToTop from './components/ScrollToTop';
-import { CheckIcon } from './components/Icons';
-import Home from './pages/Home';
-import Menu from './pages/Menu';
-import DishDetail from './pages/DishDetail';
-import Cart from './pages/Cart';
-import Checkout from './pages/Checkout';
-import TrackLookup from './pages/TrackLookup';
-import OrderTracking from './pages/OrderTracking';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import NotFound from './pages/NotFound';
+import React, { useState } from "react";
+// We use HashRouter instead of BrowserRouter because the site is hosted on
+// GitHub Pages. With BrowserRouter, refreshing a page like /menu gives a 404 there.
+import { HashRouter, Routes, Route } from "react-router-dom";
 
+import NavBar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Menu from "./pages/Menu";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import TrackOrder from "./pages/TrackOrder";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import "./styles/App.css";
 
-function loadCart() {
-  const saved = JSON.parse(localStorage.getItem('ember-cart'));
-  if (Array.isArray(saved)) {
-    return saved;
+// localStorage only stores text, so we turn our data into text with
+// JSON.stringify() when saving and back into data with JSON.parse() when loading.
+function loadFromStorage(key, defaultValue) {
+  const saved = localStorage.getItem(key);
+  if (saved === null) {
+    return defaultValue;
   }
-  return [];
+  return JSON.parse(saved);
 }
 
-
-function loadTheme() {
-  const saved = localStorage.getItem('ember-theme');
-  if (saved === 'light' || saved === 'dark') {
-    return saved;
-  }
-  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return 'dark';
-  }
-  return 'light';
+function saveToStorage(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
 }
 
 function App() {
- 
-  const [cart, setCart] = useState(loadCart());
-  const [theme, setTheme] = useState(loadTheme());
-  const [message, setMessage] = useState(''); 
+  const [cart, setCart] = useState(loadFromStorage("cart", []));
+  const [order, setOrder] = useState(loadFromStorage("order", null));
+  const [darkMode, setDarkMode] = useState(loadFromStorage("darkMode", false));
 
- 
-
- 
-  function saveCart(newCart) {
+  // Every time the cart changes we update the state AND save it.
+  function updateCart(newCart) {
     setCart(newCart);
-    localStorage.setItem('ember-cart', JSON.stringify(newCart));
+    saveToStorage("cart", newCart);
   }
 
-  function addToCart(dish, qty) {
-    const existing = cart.find((item) => item.id === dish.id);
+  function addToCart(dish) {
+    const itemInCart = cart.find((item) => item.id === dish.id);
 
-    if (existing) {
-     
-      const newQty = Math.min(existing.qty + qty, 20);
-      saveCart(cart.map((item) => (item.id === dish.id ? { ...item, qty: newQty } : item)));
+    if (itemInCart) {
+      // Already in the cart: add 1 to its quantity
+      const newCart = cart.map((item) =>
+        item.id === dish.id ? { ...item, quantity: item.quantity + 1 } : item
+      );
+      updateCart(newCart);
     } else {
-      saveCart([...cart, { ...dish, qty: qty }]);
+      // Not in the cart yet: add it with quantity 1
+      updateCart([...cart, { ...dish, quantity: 1 }]);
     }
   }
 
-  function changeQty(id, qty) {
-    if (qty <= 0) {
-      removeFromCart(id);
-    } else {
-      saveCart(cart.map((item) => (item.id === id ? { ...item, qty: qty } : item)));
-    }
+  function changeQuantity(id, amount) {
+    const newCart = cart.map((item) =>
+      item.id === id ? { ...item, quantity: item.quantity + amount } : item
+    );
+    // Remove any item whose quantity went down to 0
+    updateCart(newCart.filter((item) => item.quantity > 0));
   }
 
   function removeFromCart(id) {
-    saveCart(cart.filter((item) => item.id !== id));
+    updateCart(cart.filter((item) => item.id !== id));
   }
 
-  function clearCart() {
-    saveCart([]);
+  // Called by the Checkout page when the form is valid
+  function placeOrder(newOrder) {
+    setOrder(newOrder);
+    saveToStorage("order", newOrder);
+    updateCart([]); // empty the cart
   }
 
-  
-  let count = 0;
+  function toggleDarkMode() {
+    setDarkMode(!darkMode);
+    saveToStorage("darkMode", !darkMode);
+  }
+
+  // Total number of items, shown on the cart button in the navbar
+  let cartCount = 0;
   cart.forEach((item) => {
-    count = count + item.qty;
+    cartCount = cartCount + item.quantity;
   });
 
-  
-
-  function toggleTheme() {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(newTheme);
-    localStorage.setItem('ember-theme', newTheme);
-  }
-
-  
-
-  function showMessage(text) {
-    setMessage(text);
-    setTimeout(() => setMessage(''), 2500); 
-  }
-
   return (
-    
-    <div className="app" data-theme={theme}>
-      <ScrollToTop />
-      <Navbar count={count} theme={theme} toggleTheme={toggleTheme} />
+    <HashRouter>
+      <div className={darkMode ? "app dark" : "app"}>
+        <NavBar
+          cartCount={cartCount}
+          darkMode={darkMode}
+          toggleDarkMode={toggleDarkMode}
+        />
 
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/menu"
-            element={<Menu cart={cart} addToCart={addToCart} changeQty={changeQty} showMessage={showMessage} />}
-          />
-          <Route
-            path="/menu/:dishId"
-            element={<DishDetail cart={cart} addToCart={addToCart} changeQty={changeQty} showMessage={showMessage} />}
-          />
-          <Route
-            path="/cart"
-            element={<Cart cart={cart} changeQty={changeQty} removeFromCart={removeFromCart} clearCart={clearCart} />}
-          />
-          <Route path="/checkout" element={<Checkout cart={cart} clearCart={clearCart} />} />
-          <Route path="/track" element={<TrackLookup />} />
-          <Route path="/track/:orderId" element={<OrderTracking />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
+        <main>
+          <Routes>
+            <Route path="/" element={<Home addToCart={addToCart} />} />
+            <Route path="/menu" element={<Menu addToCart={addToCart} />} />
+            <Route
+              path="/cart"
+              element={
+                <Cart
+                  cart={cart}
+                  changeQuantity={changeQuantity}
+                  removeFromCart={removeFromCart}
+                />
+              }
+            />
+            <Route
+              path="/checkout"
+              element={<Checkout cart={cart} placeOrder={placeOrder} />}
+            />
+            <Route path="/track" element={<TrackOrder order={order} />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </main>
 
-      <Footer />
-
-      {message && (
-        <div className="toast-stack">
-          <div className="toast">
-            <span className="toast-icon">
-              <CheckIcon size={16} />
-            </span>
-            {message}
-          </div>
-        </div>
-      )}
-    </div>
+        <Footer />
+      </div>
+    </HashRouter>
   );
 }
 

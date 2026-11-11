@@ -1,27 +1,8 @@
-import { useState } from 'react';
-import PageHeader from '../components/PageHeader';
-import { CheckIcon, ClockIcon, MailIcon, MapPinIcon, PhoneIcon } from '../components/Icons';
+import React, { useState } from "react";
 
-const INFO = [
-  { icon: MapPinIcon, title: 'Address', lines: ['Downtown'] },
-  { icon: PhoneIcon, title: 'Phone', lines: ['08 919 353'] },
-  { icon: MailIcon, title: 'Email', lines: ['ember@gmail.com'] },
-  { icon: ClockIcon, title: 'Opening hours', lines: ['Daily 11:00 – 23:00'] },
-];
-
-const EMPTY = { name: '', email: '', topic: 'General question', message: '' };
-
-function validate(values) {
-  const errors = {};
-  if (values.name.trim().length < 2) errors.name = 'Please enter your name.';
-  if (!/^\S+@\S+\.\S+$/.test(values.email.trim())) errors.email = 'Please enter a valid email address.';
-  if (values.message.trim().length < 10) errors.message = 'Your message should be at least 10 characters.';
-  return errors;
-}
-
-export default function Contact() {
-  const [values, setValues] = useState(EMPTY);
-  const [errors, setErrors] = useState({});
+function Contact() {
+  const [values, setValues] = useState({ name: "", email: "", message: "" });
+  const [errors, setErrors] = useState([]);
   const [sent, setSent] = useState(false);
 
   const handleChange = (e) => {
@@ -30,86 +11,77 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const found = validate(values);
-    setErrors(found);
-    if (Object.keys(found).length > 0) return;
 
-  
+    const newErrors = [];
+    if (!values.name.trim()) newErrors.push("Name is required.");
+    if (!values.email.trim()) newErrors.push("Email is required.");
+    else if (!/^\S+@\S+\.\S+$/.test(values.email)) newErrors.push("Email is not valid.");
+    if (!values.message.trim()) newErrors.push("Message is required.");
+
+    setErrors(newErrors);
+    if (newErrors.length > 0) {
+      setSent(false);
+      return;
+    }
+
+   
     setSent(true);
-    setValues(EMPTY);
+    setValues({ name: "", email: "", message: "" });
   };
 
   return (
-    <>
-      <PageHeader eyebrow="Contact" title="We'd love to hear from you">
-        Questions about an order, catering or feedback on a dish? Send us a message.
-      </PageHeader>
+    <div className="container">
+      <h1 className="page-title">Contact Us</h1>
 
-      <section className="section section-tight">
-        <div className="container">
-          <div className="info-grid">
-            {INFO.map(({ icon: Icon, title, lines }) => (
-              <div key={title} className="card info-card">
-                <span className="step-icon">
-                  <Icon size={22} />
-                </span>
-                <h3>{title}</h3>
-                {lines.map((line) => (
-                  <p key={line}>{line}</p>
-                ))}
-              </div>
-            ))}
-          </div>
-
-          <div className="card form-card contact-form">
-            {sent ? (
-              <div className="sent">
-                <span className="sent-icon">
-                  <CheckIcon size={28} />
-                </span>
-                <h2>Message sent!</h2>
-                <p className="muted">Thanks for getting in touch. We&apos;ll reply as soon as we can.</p>
-                <button type="button" className="btn btn-ghost" onClick={() => setSent(false)}>
-                  Send another message
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} noValidate>
-                <h2>Send a message</h2>
-                <div className="form-row">
-                  <div className={`field ${errors.name ? 'has-error' : ''}`}>
-                    <label htmlFor="contact-name">Name</label>
-                    <input id="contact-name" name="name" value={values.name} onChange={handleChange} />
-                    {errors.name && <p className="field-error">{errors.name}</p>}
-                  </div>
-                  <div className={`field ${errors.email ? 'has-error' : ''}`}>
-                    <label htmlFor="contact-email">Email</label>
-                    <input id="contact-email" name="email" type="email" value={values.email} onChange={handleChange} />
-                    {errors.email && <p className="field-error">{errors.email}</p>}
-                  </div>
-                </div>
-                <div className="field">
-                  <label htmlFor="contact-topic">Topic</label>
-                  <select id="contact-topic" name="topic" value={values.topic} onChange={handleChange}>
-                    <option>General question</option>
-                    <option>Problem with an order</option>
-                    <option>Catering and events</option>
-                    <option>Feedback</option>
-                  </select>
-                </div>
-                <div className={`field ${errors.message ? 'has-error' : ''}`}>
-                  <label htmlFor="contact-message">Message</label>
-                  <textarea id="contact-message" name="message" rows={5} value={values.message} onChange={handleChange} />
-                  {errors.message && <p className="field-error">{errors.message}</p>}
-                </div>
-                <button type="submit" className="btn btn-primary btn-lg">
-                  Send message
-                </button>
-              </form>
-            )}
-          </div>
+      <div className="contact-info">
+        <div className="step">
+          <span className="step-icon">📍</span>
+          <h3>Address</h3>
+          <p>Downtown</p>
         </div>
-      </section>
-    </>
+        <div className="step">
+          <span className="step-icon">📞</span>
+          <h3>Phone</h3>
+          <p>08 919 353</p>
+        </div>
+        <div className="step">
+          <span className="step-icon">✉️</span>
+          <h3>Email</h3>
+          <p>ember@gmail.com</p>
+        </div>
+      </div>
+
+      <form className="card form contact-form" onSubmit={handleSubmit}>
+        <h2>Send us a message</h2>
+
+        <label htmlFor="name">Name</label>
+        <input id="name" name="name" type="text" placeholder="Enter your name..."
+          value={values.name} onChange={handleChange} />
+
+        <label htmlFor="email">Email</label>
+        <input id="email" name="email" type="text" placeholder="Enter your email..."
+          value={values.email} onChange={handleChange} />
+
+        <label htmlFor="message">Message</label>
+        <textarea id="message" name="message" rows="5" placeholder="Enter your message..."
+          value={values.message} onChange={handleChange} />
+
+        {errors.length > 0 && (
+          <ul className="errors">
+            {errors.map((error) => (
+              <li key={error}>{error}</li>
+            ))}
+          </ul>
+        )}
+
+        {sent && <p className="success">Thank you! Your message has been sent.</p>}
+
+        <button type="submit" className="btn">
+          Send Message
+        </button>
+      </form>
+    </div>
   );
 }
+
+export default Contact;

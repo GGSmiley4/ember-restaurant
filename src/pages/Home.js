@@ -1,94 +1,63 @@
-import { Link } from 'react-router-dom';
-import DishArt from '../components/DishArt';
-import { ArrowRightIcon, FlameIcon } from '../components/Icons';
-import { CATEGORIES, CATEGORY_META, MENU, getDish } from '../data/menu';
+import React from "react";
+import { Link } from "react-router-dom";
+import menu from "../data/menu";
+import DishCard from "../components/DishCard";
 
-export default function Home() {
+const steps = [
+  { id: 1, icon: "📋", title: "Pick your food", text: "Browse the menu and add dishes to your cart." },
+  { id: 2, icon: "📝", title: "Check out", text: "Enter your address and choose cash or card." },
+  { id: 3, icon: "🛵", title: "Track it", text: "Watch your order go from our kitchen to your door." },
+];
+
+function Home(props) {
+  // Show one dish from each category on the home page
+  const popular = menu.filter(
+    (dish) => dish.id === 1 || dish.id === 3 || dish.id === 6
+  );
+
   return (
-    <>
-      {}
+    <div>
       <section className="hero">
-        <div className="container hero-inner">
-          <div className="hero-copy">
-            <span className="eyebrow">
-              <FlameIcon size={15} /> Made fresh when you order
-            </span>
-            <h1>
-              Hot from the grill, <span className="highlight">at your door</span> in 30 minutes.
-            </h1>
-            <p className="lead">
-              Burgers, cold drinks and sweet desserts. Order in a few clicks and follow your food from our kitchen
-              to your table.
-            </p>
-            <div className="hero-actions">
-              <Link to="/menu" className="btn btn-primary btn-lg">
-                Order now <ArrowRightIcon size={18} />
-              </Link>
-              <Link to="/track" className="btn btn-ghost btn-lg">
-                Track an order
-              </Link>
-            </div>
-            <ul className="hero-stats">
-              <li>
-                <strong>{MENU.length}</strong>
-                <span>dishes</span>
-              </li>
-              <li>
-                <strong>{CATEGORIES.length}</strong>
-                <span>categories</span>
-              </li>
-              <li>
-                <strong>~30 min</strong>
-                <span>delivery</span>
-              </li>
-            </ul>
-          </div>
-
-          <div className="hero-visual">
-            <div className="hero-blob" />
-            <DishArt art={getDish('classic-burger').art} className="hero-main" />
-            <div className="hero-float float-a">
-              <DishArt art={getDish('mint-lemonade').art} />
-            </div>
-            <div className="hero-float float-b">
-              <DishArt art={getDish('glazed-donut').art} />
-            </div>
-            <div className="hero-badge">
-              <strong>Free delivery</strong>
-              <span>on orders over $25</span>
-            </div>
-          </div>
+        <div className="hero-content">
+          <h1>Hot food, delivered fast</h1>
+          <p>
+            Burgers, cold drinks and sweet desserts. Order in a few clicks and
+            follow your food from our kitchen to your table.
+          </p>
+          <Link to="/menu" className="btn btn-big">
+            Order Now
+          </Link>
         </div>
       </section>
 
-      {}
-      <section className="section">
-        <div className="container">
-          <div className="section-head">
-            <span className="eyebrow">Categories</span>
-            <h2>What are you craving?</h2>
-          </div>
-          <div className="category-grid">
-            {CATEGORIES.map((cat) => {
-              const meta = CATEGORY_META[cat];
-              const count = MENU.filter((d) => d.category === cat).length;
-              return (
-                <Link key={cat} to={`/menu?category=${cat}`} className="category-tile" style={{ '--tint': meta.tint }}>
-                  <div className="category-art">
-                    <DishArt art={meta.art} />
-                  </div>
-                  <div className="category-text">
-                    <h3>{cat}</h3>
-                    <p>{meta.blurb}</p>
-                    <span className="category-count">{count} items</span>
-                  </div>
-                  <ArrowRightIcon className="category-arrow" />
-                </Link>
-              );
-            })}
-          </div>
+      <section className="container">
+        <h2 className="section-title">How it works</h2>
+        <div className="steps">
+          {steps.map((step) => (
+            <div className="step" key={step.id}>
+              <span className="step-icon">{step.icon}</span>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </div>
+          ))}
         </div>
       </section>
-    </>
+
+      <section className="container">
+        <h2 className="section-title">Popular dishes</h2>
+        <div className="dish-grid">
+          {popular.map((dish) => (
+            <DishCard key={dish.id} dish={dish} addToCart={props.addToCart} />
+          ))}
+        </div>
+        <div className="center">
+          <Link to="/menu" className="btn btn-outline">
+            See the full menu
+          </Link>
+        </div>
+      </section>
+    </div>
   );
 }
+
+export default Home;

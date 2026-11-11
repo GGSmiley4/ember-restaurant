@@ -1,0 +1,780 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff8f3;
+  color: #222;
+}
+
+main {
+  flex: 1;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+}
+
+/* Buttons and inputs don't use the page font by default, so we tell them to */
+button,
+input,
+textarea {
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* ---------- Navigation bar ---------- */
+
+.navbar {
+  background-color: #1f1a17;
+  padding: 14px 6%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px;
+}
+
+.nav-links a {
+  color: #ddd;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: #ff7a45;
+}
+
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-btn {
+  background: none;
+  border: 1px solid #555;
+  color: white;
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  border-color: #ff7a45;
+}
+
+.cart-btn {
+  background-color: #e4572e;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 14px;
+  border-radius: 6px;
+}
+
+.cart-btn:hover {
+  background-color: #c8441f;
+}
+
+.cart-count {
+  background-color: white;
+  color: #e4572e;
+  border-radius: 20px;
+  padding: 0 8px;
+  margin-left: 6px;
+  font-size: 14px;
+}
+
+/* The ☰ button only shows on small screens (see the bottom of this file) */
+.menu-toggle {
+  display: none;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-block;
+  background-color: #e4572e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #c8441f;
+}
+
+.btn-big {
+  padding: 14px 32px;
+  font-size: 18px;
+}
+
+.btn-full {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: #e4572e;
+  border: 2px solid #e4572e;
+  margin-top: 30px;
+}
+
+.btn-outline:hover {
+  background-color: #e4572e;
+  color: white;
+}
+
+/* ---------- General layout ---------- */
+
+.container {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 36px;
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+.center {
+  text-align: center;
+}
+
+.empty {
+  text-align: center;
+  font-size: 18px;
+  color: #777;
+  margin: 30px 0;
+}
+
+.note {
+  font-size: 14px;
+  color: #777;
+}
+
+.card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 3px 12px #00000015;
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+/* ---------- Home page ---------- */
+
+.hero {
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 50px 20px;
+  color: white;
+  background-image: linear-gradient(#00000099, #00000099),
+    url("https://images.unsplash.com/photo-1615297928064-24977384d0da?auto=format&fit=crop&w=1600&q=80");
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-content {
+  max-width: 700px;
+}
+
+.hero-content h1 {
+  font-size: 50px;
+  margin: 0 0 15px;
+}
+
+.hero-content p {
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.step {
+  background-color: white;
+  border-radius: 12px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 3px 12px #00000015;
+}
+
+.step-icon {
+  font-size: 40px;
+}
+
+.step h3 {
+  margin: 10px 0;
+}
+
+.step p {
+  margin: 0;
+  color: #666;
+}
+
+/* ---------- Menu page and dish cards ---------- */
+
+.search {
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto 20px;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 30px;
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.filter-btn {
+  background-color: white;
+  border: 2px solid #e4572e;
+  color: #e4572e;
+  border-radius: 30px;
+  padding: 8px 20px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  background-color: #e4572e;
+  color: white;
+}
+
+.dish-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.dish-card {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 12px #00000015;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s;
+}
+
+.dish-card:hover {
+  transform: translateY(-5px);
+}
+
+.dish-card img {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+}
+
+.dish-info {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.dish-info h3 {
+  margin: 8px 0;
+}
+
+.dish-info p {
+  color: #666;
+  margin: 0 0 15px;
+  flex: 1;
+}
+
+.category {
+  align-self: flex-start;
+  background-color: #ffe4d6;
+  color: #c8441f;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+.dish-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price {
+  font-size: 22px;
+  font-weight: bold;
+  color: #e4572e;
+}
+
+/* ---------- Cart, checkout and tracking ---------- */
+
+.cart-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 25px;
+  align-items: start;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.cart-item-info {
+  flex: 1;
+}
+
+.cart-item-info h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.cart-item-info p {
+  margin: 4px 0 0;
+  color: #777;
+}
+
+.quantity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quantity button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.quantity button:hover {
+  border-color: #e4572e;
+  color: #e4572e;
+}
+
+.item-total {
+  font-weight: bold;
+  width: 70px;
+  text-align: right;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #d62d2d;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.remove-btn:hover {
+  text-decoration: underline;
+}
+
+.summary {
+  border-top: 1px solid #eee;
+  margin-top: 10px;
+  padding-top: 10px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+
+.summary-row.total {
+  font-size: 20px;
+  font-weight: bold;
+  border-top: 1px solid #eee;
+  margin-top: 5px;
+  padding-top: 10px;
+}
+
+/* Status bar on the Track Order page */
+
+.progress {
+  height: 12px;
+  background-color: #eee;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 25px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #e4572e;
+  border-radius: 10px;
+  transition: width 0.5s;
+}
+
+.stages {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #aaa;
+  font-weight: bold;
+  width: 25%;
+}
+
+.stage-icon {
+  font-size: 30px;
+  opacity: 0.4;
+}
+
+.stage.done {
+  color: #e4572e;
+}
+
+.stage.done .stage-icon {
+  opacity: 1;
+}
+
+/* ---------- Forms ---------- */
+
+.form label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.form input[type="text"],
+.form input[type="tel"],
+.form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font: inherit;
+}
+
+.form input:focus,
+.form textarea:focus,
+.search:focus {
+  outline: 2px solid #e4572e;
+  border-color: transparent;
+}
+
+.payment-options {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.form .radio {
+  font-weight: normal;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px 15px;
+  margin-top: 6px;
+  cursor: pointer;
+}
+
+.errors {
+  background-color: #fde8e8;
+  color: #b91c1c;
+  border-radius: 6px;
+  padding: 12px 12px 12px 30px;
+  margin-top: 20px;
+}
+
+.success {
+  background-color: #dcfce7;
+  color: #15803d;
+  font-weight: bold;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.form .btn {
+  margin-top: 20px;
+}
+
+/* ---------- About and Contact ---------- */
+
+.about {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.about img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.about p {
+  font-size: 17px;
+}
+
+.contact-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.contact-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ---------- Footer ---------- */
+
+.footer {
+  background-color: #1f1a17;
+  color: #ccc;
+  padding: 30px 6% 15px;
+}
+
+.footer-columns {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 30px;
+}
+
+.footer h3,
+.footer h4 {
+  color: white;
+  margin-top: 0;
+}
+
+.footer p {
+  margin: 4px 0;
+}
+
+.footer a {
+  display: block;
+  color: #ccc;
+  text-decoration: none;
+  margin-bottom: 4px;
+}
+
+.footer a:hover {
+  color: #ff7a45;
+}
+
+.copyright {
+  text-align: center;
+  border-top: 1px solid #444;
+  margin-top: 20px;
+  padding-top: 15px;
+  font-size: 14px;
+}
+
+/* ---------- Dark mode ---------- */
+/* When the "dark" class is on the .app div, these colours replace the normal ones */
+
+.app.dark {
+  background-color: #141414;
+  color: #eee;
+}
+
+.dark .card,
+.dark .step,
+.dark .dish-card,
+.dark .filter-btn,
+.dark .quantity button {
+  background-color: #242424;
+  color: #eee;
+}
+
+.dark .filter-btn.active,
+.dark .filter-btn:hover {
+  background-color: #e4572e;
+  color: white;
+}
+
+.dark .step p,
+.dark .dish-info p,
+.dark .cart-item-info p,
+.dark .empty,
+.dark .note {
+  color: #aaa;
+}
+
+.dark .search,
+.dark .form input[type="text"],
+.dark .form input[type="tel"],
+.dark .form textarea {
+  background-color: #1b1b1b;
+  color: #eee;
+  border-color: #444;
+}
+
+.dark .cart-item,
+.dark .summary,
+.dark .summary-row.total {
+  border-color: #333;
+}
+
+.dark .progress {
+  background-color: #333;
+}
+
+.dark .category {
+  background-color: #4a2416;
+  color: #ffb08f;
+}
+
+.dark .form .radio {
+  border-color: #444;
+}
+
+/* ---------- Responsive (tablets and phones) ---------- */
+
+@media (max-width: 900px) {
+  .dish-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cart-layout,
+  .about {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  /* Show the ☰ button and hide the links until it is clicked */
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    order: 3; /* move the links below the logo and buttons */
+    width: 100%;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px 0;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .dish-grid,
+  .steps,
+  .contact-info,
+  .footer-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-content h1 {
+    font-size: 34px;
+  }
+
+  .page-title {
+    font-size: 30px;
+  }
+
+  /* Cart items wrap onto two lines on phones */
+  .cart-item {
+    flex-wrap: wrap;
+  }
+
+  .cart-item-info {
+    min-width: 150px;
+  }
+
+  .stage {
+    font-size: 13px;
+  }
+
+  .stage-icon {
+    font-size: 24px;
+  }
+}
